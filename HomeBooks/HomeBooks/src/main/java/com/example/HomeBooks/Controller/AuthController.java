@@ -33,8 +33,7 @@ public class AuthController {
             @RequestBody LoginRequest loginRequest
     ) {
 
-        String response =
-                userService.loginUser(loginRequest);
+        String response = userService.loginUser(loginRequest);
 
         return ResponseEntity.ok(response);
     }

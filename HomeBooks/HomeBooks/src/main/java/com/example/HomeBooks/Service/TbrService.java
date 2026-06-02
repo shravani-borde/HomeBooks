@@ -6,6 +6,8 @@ import com.example.HomeBooks.Model.User;
 import com.example.HomeBooks.Repository.BookRepository;
 import com.example.HomeBooks.Repository.UserRepository;
 
+import com.example.HomeBooks.dto.BookResponseDTO;
+import com.example.HomeBooks.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -56,9 +59,8 @@ public class TbrService {
         userRepository.save(user);
     }
 
-    public Set<Book> getMyTbrBooks() {
+    public List<BookResponseDTO> getMyTbrBooks() {
 
-        // Get current logged-in user
         Authentication authentication =
                 SecurityContextHolder
                         .getContext()
@@ -67,15 +69,16 @@ public class TbrService {
         String email =
                 authentication.getName();
 
-        // Find user
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found")
                 );
 
-        // Return TBR books
-        return user.getTbrBooks();
+        return user.getTbrBooks()
+                .stream()
+                .map(BookMapper::toDTO)
+                .toList();
     }
 
     public void removeBookFromTbr(Long bookId) {

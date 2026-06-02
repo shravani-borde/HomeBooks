@@ -8,6 +8,8 @@ import com.example.HomeBooks.Repository.BookRepository;
 import com.example.HomeBooks.Repository.LikeRepository;
 import com.example.HomeBooks.Repository.UserRepository;
 
+import com.example.HomeBooks.dto.BookResponseDTO;
+import com.example.HomeBooks.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
@@ -114,7 +116,7 @@ public class LikeService {
         likeRepository.delete(like);
     }
 
-    public List<Book> getLikedBooks() {
+    public List<BookResponseDTO> getLikedBooks(){
 
         // Get current authenticated user
         Authentication authentication =
@@ -138,9 +140,8 @@ public class LikeService {
 
         // Extract books from likes
         return likes.stream()
-
                 .map(Like::getBook)
-
-                .collect(Collectors.toList());
+                .map(BookMapper::toDTO)
+                .toList();
     }
 }

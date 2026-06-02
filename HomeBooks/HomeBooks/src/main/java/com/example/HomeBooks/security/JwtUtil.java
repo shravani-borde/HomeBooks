@@ -16,30 +16,24 @@ public class JwtUtil {
     private String SECRET_KEY;
 
     // Generate token
-    public String generateToken(String email) {
+    public String generateToken(
+            String email,
+            String role
+    ) {
 
         return Jwts.builder()
 
-                // Payload
                 .setSubject(email)
-
-                // Issued time
+                // Custom claim
+                .claim("role", role)
                 .setIssuedAt(new Date())
-
-                // Expiration time
                 .setExpiration(
-                        new Date(
-                                System.currentTimeMillis()
-                                        + 1000 * 60 * 60
-                        )
+                        new Date(System.currentTimeMillis() + 1000 * 60 * 60)
                 )
-
-                // Sign token
                 .signWith(
                         SignatureAlgorithm.HS256,
                         SECRET_KEY
                 )
-
                 .compact();
     }
 
@@ -83,5 +77,13 @@ public class JwtUtil {
                 extractEmail(token);
 
         return extractedEmail.equals(email);
+    }
+
+    public String extractRole(String token) {
+
+        return extractClaim(
+                token,
+                claims -> claims.get("role", String.class)
+        );
     }
 }

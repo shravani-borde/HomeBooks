@@ -3,12 +3,14 @@ package com.example.HomeBooks.Controller;
 import com.example.HomeBooks.Model.Book;
 import com.example.HomeBooks.Service.TbrService;
 
+import com.example.HomeBooks.dto.BookResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -32,12 +34,11 @@ public class TbrController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<Book>> getMyTbrBooks() {
+    public ResponseEntity<List<BookResponseDTO>> getMyTbrBooks() {
 
-        Set<Book> books =
-                tbrService.getMyTbrBooks();
-
-        return ResponseEntity.ok(books);
+        return ResponseEntity.ok(
+                tbrService.getMyTbrBooks()
+        );
     }
 
     @DeleteMapping("/{bookId}")

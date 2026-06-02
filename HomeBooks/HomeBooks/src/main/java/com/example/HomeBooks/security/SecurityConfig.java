@@ -25,13 +25,34 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable())
 
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public auth endpoints
-                        .requestMatchers("/api/auth/**")
+                        // Public endpoints
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        )
                         .permitAll()
+                        // Admin only
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/books"
+                        ).hasRole("ADMIN")
 
-                        // Everything else protected
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/books/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/books/**"
+                        ).hasRole("ADMIN")
+
+                        // Everything else
                         .anyRequest()
                         .authenticated()
                 )

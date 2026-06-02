@@ -2,6 +2,7 @@ package com.example.HomeBooks.Controller;
 
 import com.example.HomeBooks.Model.Book;
 import com.example.HomeBooks.Service.BookService;
+import com.example.HomeBooks.dto.BookResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,15 +26,15 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAllBooks(){
-        List<Book> books = bookService.getAllBooks();
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks(){
+        List<BookResponseDTO> books = bookService.getAllBooks();
         return ResponseEntity.ok(books);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id){
-        Book book = bookService.getBookById(id);
-        return ResponseEntity.ok(book);
+    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable Long id){
+        BookResponseDTO bookDTO = bookService.getBookById(id);
+        return ResponseEntity.ok(bookDTO);
     }
 
     @PutMapping("/{id}")
@@ -50,39 +51,34 @@ public class BookController {
 
     // Search by title
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchByTitle(
-            @RequestParam String keyword
-    ) {
+    public ResponseEntity<List<BookResponseDTO>> searchByTitle(@RequestParam String keyword) {
 
-        List<Book> books = bookService.searchByTitle(keyword);
-
+        List<BookResponseDTO> books = bookService.searchByTitle(keyword);
         return ResponseEntity.ok(books);
     }
 
     // Search by author
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<Book>> searchByAuthor(
-            @PathVariable String author
-    ) {
+    public ResponseEntity<List<BookResponseDTO>> searchByAuthor(@PathVariable String author) {
 
-        List<Book> books = bookService.searchByAuthor(author);
+        List<BookResponseDTO> books = bookService.searchByAuthor(author);
 
         return ResponseEntity.ok(books);
     }
 
     // Search by genre
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<Book>> searchByGenre(
+    public ResponseEntity<List<BookResponseDTO>> searchByGenre(
             @PathVariable String genre
     ) {
 
-        List<Book> books = bookService.searchByGenre(genre);
+        List<BookResponseDTO> books = bookService.searchByGenre(genre);
 
         return ResponseEntity.ok(books);
     }
 
     @GetMapping("/paged")
-    public ResponseEntity<Page<Book>> getBooksWithPagination(
+    public ResponseEntity<Page<BookResponseDTO>> getBooksWithPagination(
 
             @RequestParam(defaultValue = "0") int page,
 
@@ -91,7 +87,7 @@ public class BookController {
             @RequestParam(defaultValue = "id") String sortBy
     ) {
 
-        Page<Book> books = bookService.getBooksWithPagination(
+        Page<BookResponseDTO> books = bookService.getBooksWithPagination(
                 page,
                 size,
                 sortBy

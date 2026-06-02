@@ -3,6 +3,7 @@ package com.example.HomeBooks.Controller;
 import com.example.HomeBooks.Model.Book;
 import com.example.HomeBooks.Service.LikeService;
 
+import com.example.HomeBooks.dto.BookResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -40,11 +41,7 @@ public class LikeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getLikedBooks() {
-
-        List<Book> books =
-                likeService.getLikedBooks();
-
-        return ResponseEntity.ok(books);
+    public ResponseEntity<List<BookResponseDTO>> getLikedBooks() {
+        return ResponseEntity.ok(likeService.getLikedBooks());
     }
 }
