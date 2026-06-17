@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Books from "./pages/Books";
+import Tbr from "./pages/Tbr";
+import Likes from "./pages/Likes";
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
 
         <Route path="/books" element={<Books />} />
 
+        <Route path="/tbr" element={<Tbr />} />
+
+        <Route path="/likes" element={<Likes />} />
       </Routes>
 
     </BrowserRouter>

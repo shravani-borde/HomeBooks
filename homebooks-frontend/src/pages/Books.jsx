@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllBooks } from "../services/bookService";
+import Navbar from "../components/Navbar";
 
 function Books() {
 
@@ -29,6 +30,15 @@ function Books() {
 
     return (
         <div>
+            <div>
+
+        <Navbar />
+
+        <h2>Books</h2>
+
+        {/* books */}
+
+    </div>
 
             <h2>Books</h2>
 
