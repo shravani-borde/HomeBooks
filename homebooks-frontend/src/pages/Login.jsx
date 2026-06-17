@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { loginUser } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
@@ -6,14 +8,31 @@ function Login() {
     const [password, setPassword] = useState("");
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        console.log({
+    try {
+
+        const token = await loginUser({
             email,
             password
         });
-    };
 
+        console.log("JWT:", token);
+
+        localStorage.setItem("token", token);
+        navigate("/books");
+        alert("Login Successful");
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Invalid Credentials");
+    }
+};
+
+    const navigate = useNavigate();
+    
     return (
         <div className="container">
 
