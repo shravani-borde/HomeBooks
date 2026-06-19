@@ -1,11 +1,11 @@
 import Layout from "../components/layout/Layout";
 
-function Tbr() {
+function LikedBooks() {
   return (
     <Layout>
-      <h1>My TBR</h1>
+      <h1>Liked Books</h1>
     </Layout>
   );
 }
 
-export default Tbr;
+export default LikedBooks;

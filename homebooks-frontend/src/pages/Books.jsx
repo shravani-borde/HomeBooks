@@ -1,71 +1,84 @@
 import { useEffect, useState } from "react";
-import { getAllBooks } from "../services/bookService";
-import Navbar from "../components/Navbar";
+
+import Layout from "../components/layout/Layout";
+import SearchBar from "../components/common/SearchBar";
+import BookGrid from "../components/books/BookGrid";
+import Pagination from "../components/common/Pagination";
+import {
+  useSearchParams
+} from "react-router-dom";
+
+import {
+  getBooks,
+  searchBooks
+} from "../api/bookApi";
 
 function Books() {
+  const [books, setBooks] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] =
+    useState(0);
 
-    const [books, setBooks] = useState([]);
+  const [search, setSearch] =
+    useState("");
+    const [searchParams] =
+  useSearchParams();
+
+    const query =
+  searchParams.get("q");
 
     useEffect(() => {
+  if (query) {
+    handleSearch(query);
+  } else {
+    loadBooks();
+  }
+}, [page, query]);
 
-        loadBooks();
+  const loadBooks = async () => {
+    try {
+      const data =
+        await getBooks(page);
 
-    }, []);
+      setBooks(data.content);
+      setTotalPages(
+        data.totalPages
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const loadBooks = async () => {
+  const handleSearch = async (
+  keyword
+) => {
+  try {
+    const data =
+      await searchBooks(
+        keyword
+      );
 
-        try {
+    setBooks(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-            const data =
-                await getAllBooks();
+  return (
+    <Layout>
+      <h1>Books</h1>
 
-            setBooks(data);
+      <BookGrid books={books} />
 
-        } catch (error) {
-
-            console.error(error);
-
-        }
-    };
-
-    return (
-        <div>
-            <div>
-
-        <Navbar />
-
-        <h2>Books</h2>
-
-        {/* books */}
-
-    </div>
-
-            <h2>Books</h2>
-
-            {
-                books.map((book) => (
-
-                    <div key={book.id}>
-
-                        <h3>{book.title}</h3>
-
-                        <p>
-                            Author: {book.author}
-                        </p>
-
-                        <p>
-                            Genre: {book.genre}
-                        </p>
-
-                        <hr />
-
-                    </div>
-
-                ))
-            }
-
-        </div>
-    );
+      {!search && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          setPage={setPage}
+        />
+      )}
+    </Layout>
+  );
 }
 
 export default Books;

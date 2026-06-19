@@ -1,11 +1,11 @@
 import Layout from "../components/layout/Layout";
 
-function Tbr() {
+function Settings() {
   return (
     <Layout>
-      <h1>My TBR</h1>
+      <h1>Settings</h1>
     </Layout>
   );
 }
 
-export default Tbr;
+export default Settings;
