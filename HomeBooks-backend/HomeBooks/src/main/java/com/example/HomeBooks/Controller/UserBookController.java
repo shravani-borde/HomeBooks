@@ -1,9 +1,13 @@
 package com.example.HomeBooks.Controller;
 
+import com.example.HomeBooks.Model.User;
+import com.example.HomeBooks.Repository.UserRepository;
 import com.example.HomeBooks.Service.UserService;
+import com.example.HomeBooks.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -77,5 +81,35 @@ public class UserBookController {
                                 auth.getName()
                         )
         );
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(
+                        () -> new RuntimeException("User not found")
+                );
+
+        UserResponseDTO dto =
+                new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                );
+
+        return ResponseEntity.ok(dto);
     }
 }

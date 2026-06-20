@@ -52,11 +52,10 @@ public class TbrService {
                         new RuntimeException("Book not found")
                 );
 
-        // Add book to TBR
-        user.getTbrBooks().add(book);
-
-        // Save user
-        userRepository.save(user);
+        if (!user.getTbrBooks().contains(book)) {
+            user.getTbrBooks().add(book);
+            userRepository.save(user);
+        }
     }
 
     public List<BookResponseDTO> getMyTbrBooks() {

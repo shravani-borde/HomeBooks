@@ -105,8 +105,7 @@ public class RatingService {
                         .orElseThrow(
                                 () ->
                                         new RuntimeException(
-                                                "User not found"
-                                        )
+                                                "User not found")
                         );
 
         return ratingRepository

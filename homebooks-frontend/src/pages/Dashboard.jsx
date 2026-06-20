@@ -86,9 +86,11 @@ function Dashboard() {
         books={likedBooks}
       />
 
-      <RecommendationSection
-        books={popularBooks}
-      />
+        <div id="recommendations">
+  <RecommendationSection
+    books={popularBooks}
+  />
+</div>
 
     </Layout>
   );

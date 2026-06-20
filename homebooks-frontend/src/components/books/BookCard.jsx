@@ -6,7 +6,9 @@ import {
 
 import {
   addToTbr,
+  removeFromTbr,
   likeBook,
+  unlikeBook,
   rateBook
 } from "../../api/bookApi";
 
@@ -14,23 +16,57 @@ import { useState } from "react";
 
 function BookCard({ book }) {
 
-  const handleTbr = async () => {
+    const [liked, setLiked] =
+  useState(false);
+
+    const [saved, setSaved] =
+  useState(false);
+
+  const handleTbr =
+  async () => {
+
     try {
-      await addToTbr(book.id);
-      alert("Added to TBR!");
+
+      if (saved) {
+        await removeFromTbr(
+          book.id
+        );
+
+        setSaved(false);
+      } else {
+        await addToTbr(
+          book.id
+        );
+
+        setSaved(true);
+      }
+
     } catch (error) {
       console.log(error);
-      alert("Failed to add.");
     }
   };
 
-  const handleLike = async () => {
+  const handleLike =
+  async () => {
+
     try {
-      await likeBook(book.id);
-      alert("Book liked!");
+
+      if (liked) {
+        await unlikeBook(
+          book.id
+        );
+
+        setLiked(false);
+      } else {
+        await likeBook(
+          book.id
+        );
+
+        setLiked(true);
+      }
+
     } catch (error) {
       console.log(error);
-      alert("Failed to like.");
     }
   };
 
@@ -136,12 +172,24 @@ const [selectedRating,
 )}
 
         <FaHeart
-          onClick={handleLike}
-        />
+  className="action-icon"
+  color={
+    liked
+      ? "red"
+      : "gray"
+  }
+  onClick={handleLike}
+/>
 
         <FaBookmark
-          onClick={handleTbr}
-        />
+  className="action-icon"
+  color={
+    saved
+      ? "#6d5dfc"
+      : "gray"
+  }
+  onClick={handleTbr}
+/>
 
         <FaStar
   onClick={() =>

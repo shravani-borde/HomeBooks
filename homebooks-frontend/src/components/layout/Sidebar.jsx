@@ -88,10 +88,36 @@ function Sidebar() {
         </button>
 
         <button
-          onClick={goToRecommendations}
-        >
-          ⭐ Recommendations
-        </button>
+  onClick={() => {
+    if (
+      window.location.pathname ===
+      "/dashboard"
+    ) {
+      document
+        .getElementById(
+          "recommendations"
+        )
+        ?.scrollIntoView({
+          behavior: "smooth"
+        });
+    } else {
+      navigate("/dashboard");
+
+      setTimeout(() => {
+        document
+          .getElementById(
+            "recommendations"
+          )
+          ?.scrollIntoView({
+            behavior:
+              "smooth"
+          });
+      }, 200);
+    }
+  }}
+>
+  Recommendations
+</button>
 
         <button
           onClick={() =>

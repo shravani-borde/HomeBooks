@@ -52,17 +52,16 @@ public class RatingController {
     public ResponseEntity<List<Rating>>
     getMyRatings() {
 
-        Authentication auth =
+        Authentication authentication =
                 SecurityContextHolder
                         .getContext()
                         .getAuthentication();
 
         String email =
-                auth.getName();
+                authentication.getName();
 
         return ResponseEntity.ok(
-                ratingService
-                        .getMyRatings(email)
+                ratingService.getMyRatings(email)
         );
     }
 }

@@ -98,8 +98,26 @@ export const getTopRatedBooks =
 export const getMyRatings =
   async () => {
     const response =
-      await api.get(
-        "/ratings/my"
+      await api.get("/ratings/my");
+
+    return response.data;
+  };
+
+export const unlikeBook =
+  async (bookId) => {
+    const response =
+      await api.delete(
+        `/user/liked/${bookId}`
+      );
+
+    return response.data;
+  };
+
+export const removeFromTbr =
+  async (bookId) => {
+    const response =
+      await api.delete(
+        `/user/tbr/${bookId}`
       );
 
     return response.data;
