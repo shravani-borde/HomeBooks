@@ -112,8 +112,16 @@ public class LikeService {
                         new RuntimeException("Book not liked yet")
                 );
 
+        System.out.println("Before remove: " +
+                user.getTbrBooks().size());
+
         // Delete interaction
-        likeRepository.delete(like);
+        boolean removed = user.getLikedBooks().remove(like);
+
+        System.out.println("Removed: " + removed);
+
+        System.out.println("After remove: " +
+                user.getTbrBooks().size());
     }
 
     public List<BookResponseDTO> getLikedBooks(){

@@ -2,6 +2,8 @@ package com.example.HomeBooks.Controller;
 
 import com.example.HomeBooks.Model.User;
 import com.example.HomeBooks.Repository.UserRepository;
+import com.example.HomeBooks.Service.LikeService;
+import com.example.HomeBooks.Service.TbrService;
 import com.example.HomeBooks.Service.UserService;
 import com.example.HomeBooks.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,12 @@ public class UserBookController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TbrService tbrService;
+
+    @Autowired
+    private LikeService likeService;
 
     @PostMapping(
             "/tbr/{bookId}"
@@ -111,5 +119,37 @@ public class UserBookController {
                 );
 
         return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping("/tbr/{bookId}")
+    public ResponseEntity<String>
+    removeFromTbr(
+            @PathVariable Long bookId,
+            Authentication auth
+    ) {
+
+        tbrService.removeBookFromTbr(
+                bookId
+        );
+
+        return ResponseEntity.ok(
+                "Removed from TBR"
+        );
+    }
+
+    @DeleteMapping("/liked/{bookId}")
+    public ResponseEntity<String>
+    unlikeBook(
+            @PathVariable Long bookId,
+            Authentication auth
+    ) {
+
+        likeService.unlikeBook(
+                bookId
+        );
+
+        return ResponseEntity.ok(
+                "Book unliked"
+        );
     }
 }

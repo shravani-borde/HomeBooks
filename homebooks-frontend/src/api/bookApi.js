@@ -21,28 +21,43 @@ export const searchBooks = async (
   return response.data;
 };
 
-export const addToTbr = async (
-  id
+export const addToTbr = async (bookId) => {
+  const response = await api.post(
+    `/tbr/${bookId}`
+  );
+
+  return response.data;
+};
+
+export const removeFromTbr = async (
+  bookId
 ) => {
-  const response =
-    await api.post(
-      `/user/tbr/${id}`
-    );
+  const response = await api.delete(
+    `/tbr/${bookId}`
+  );
 
   return response.data;
 };
 
 export const likeBook = async (
-  id
+  bookId
 ) => {
-  const response =
-    await api.post(
-      `/user/liked/${id}`
-    );
+  const response = await api.post(
+    `/likes/${bookId}`
+  );
 
   return response.data;
 };
 
+export const unlikeBook = async (
+  bookId
+) => {
+  const response = await api.delete(
+    `/likes/${bookId}`
+  );
+
+  return response.data;
+};
 export const getTbrBooks =
   async () => {
     const response =
@@ -103,21 +118,21 @@ export const getMyRatings =
     return response.data;
   };
 
-export const unlikeBook =
+export const addLikedBook =
   async (bookId) => {
     const response =
-      await api.delete(
+      await api.post(
         `/user/liked/${bookId}`
       );
 
     return response.data;
   };
 
-export const removeFromTbr =
+export const removeLikedBook =
   async (bookId) => {
     const response =
       await api.delete(
-        `/user/tbr/${bookId}`
+        `/user/liked/${bookId}`
       );
 
     return response.data;

@@ -105,10 +105,28 @@ public class TbrService {
                         new RuntimeException("Book not found")
                 );
 
-        // Remove from TBR
-        user.getTbrBooks().remove(book);
+//        // Remove from TBR
+//        user.getTbrBooks().remove(book);
+//
+//        // Save changes
+//        userRepository.save(user);
+//
+//
+        System.out.println("Before remove: " +
+                user.getTbrBooks().size());
 
-        // Save changes
+        boolean removed = user.getTbrBooks()
+                .removeIf(
+                        b -> b.getId().equals(bookId)
+                );
+
+        userRepository.save(user);
+
+        System.out.println("Removed: " + removed);
+
+        System.out.println("After remove: " +
+                user.getTbrBooks().size());
+
         userRepository.save(user);
     }
 }

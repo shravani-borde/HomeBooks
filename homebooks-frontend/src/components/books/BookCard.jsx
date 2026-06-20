@@ -5,10 +5,10 @@ import {
 } from "react-icons/fa";
 
 import {
+  addLikedBook,
+  removeLikedBook,
   addToTbr,
   removeFromTbr,
-  likeBook,
-  unlikeBook,
   rateBook
 } from "../../api/bookApi";
 
@@ -16,59 +16,58 @@ import { useState } from "react";
 
 function BookCard({ book }) {
 
-    const [liked, setLiked] =
+    const [liked, setLiked] = useState(false);
+    const [saved, setSaved] = useState(false);
+
+    const [loadingLike,
+setLoadingLike] =
   useState(false);
 
-    const [saved, setSaved] =
+  const handleLike = async () => {
+  if (loadingLike) return;
+
+  setLoadingLike(true);
+
+  try {
+    if (liked) {
+      await removeLikedBook(
+        book.id
+      );
+      setLiked(false);
+    } else {
+      await addLikedBook(
+        book.id
+      );
+      setLiked(true);
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoadingLike(false);
+  }
+};
+
+    const [loadingTbr,
+setLoadingTbr] =
   useState(false);
 
-  const handleTbr =
-  async () => {
+  const handleTbr = async () => {
+  if (loadingTbr) return;
 
-    try {
+  setLoadingTbr(true);
 
-      if (saved) {
-        await removeFromTbr(
-          book.id
-        );
-
-        setSaved(false);
-      } else {
-        await addToTbr(
-          book.id
-        );
-
-        setSaved(true);
-      }
-
-    } catch (error) {
-      console.log(error);
+  try {
+    if (saved) {
+      await removeFromTbr(book.id);
+      setSaved(false);
+    } else {
+      await addToTbr(book.id);
+      setSaved(true);
     }
-  };
-
-  const handleLike =
-  async () => {
-
-    try {
-
-      if (liked) {
-        await unlikeBook(
-          book.id
-        );
-
-        setLiked(false);
-      } else {
-        await likeBook(
-          book.id
-        );
-
-        setLiked(true);
-      }
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  } finally {
+    setLoadingTbr(false);
+  }
+};
 
   const [showRating, setShowRating] =
   useState(false);
