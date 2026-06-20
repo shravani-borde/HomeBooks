@@ -48,4 +48,14 @@ public class User {
 
     private Set<Book> tbrBooks = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_liked_books",
+            joinColumns =
+            @JoinColumn(name = "user_id"),
+            inverseJoinColumns =
+            @JoinColumn(name = "book_id")
+    )
+    private Set<Book> likedBooks =
+            new HashSet<>();
 }

@@ -95,4 +95,21 @@ public class RatingService {
     getTopRatedBooks() {
         return ratingRepository.getTopRatedBooks();
     }
+
+    public List<Rating>
+    getMyRatings(String email) {
+
+        User user =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "User not found"
+                                        )
+                        );
+
+        return ratingRepository
+                .findByUser(user);
+    }
 }

@@ -309,3 +309,58 @@ body {
   object-fit: cover;
   border-radius: 15px;
 }
+
+.book-actions {
+  display: flex;
+  gap: 20px;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.book-actions svg {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.book-actions svg:hover {
+  transform: scale(1.2);
+  color: #6d5dfc;
+}
+
+.rating-box {
+  display: grid;
+  grid-template-columns:
+    repeat(5, 1fr);
+
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.rating-box button {
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #f5f6fa;
+}
+
+.rating-box button:hover {
+  background: #6d5dfc;
+  color: white;
+}
+
+.star-rating {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.rating-star {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.rating-star:hover {
+  transform: scale(1.2);
+}
