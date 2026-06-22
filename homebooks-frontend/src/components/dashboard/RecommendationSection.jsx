@@ -1,7 +1,9 @@
 import BookCard from "../books/BookCard";
 
 function RecommendationSection({
-  books
+  books,
+  likedBooks,
+  tbrBooks
 }) {
   return (
     <section id="recommendations">
@@ -13,9 +15,11 @@ function RecommendationSection({
       <div className="recommendation-grid">
         {books.map((book) => (
           <BookCard
-            key={book.id}
-            book={book}
-          />
+  key={book.id}
+  book={book}
+  likedBooks={likedBooks}
+  tbrBooks={tbrBooks}
+/>
         ))}
       </div>
 

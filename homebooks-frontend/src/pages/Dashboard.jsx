@@ -30,36 +30,32 @@ function Dashboard() {
     loadDashboard();
   }, []);
 
-  const loadDashboard =
-    async () => {
-      try {
-        const popular =
-          await getBooks();
+  const loadDashboard = async () => {
+  try {
+    const [
+      booksData,
+      likedData,
+      tbrData
+    ] = await Promise.all([
+      getBooks(),
+      getLikedBooks(),
+      getTbrBooks()
+    ]);
 
-        const tbr =
-          await getTbrBooks();
+    setBooks(booksData.content);
+    setLikedBooks(likedData);
+    setTbrBooks(tbrData);
 
-        const liked =
-          await getLikedBooks();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-        setPopularBooks(
-          popular.content
-        );
-
-        setTbrBooks(
-          tbr.slice(0, 3)
-        );
-
-        setLikedBooks(
-          liked.slice(0, 3)
-        );
-
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  loadDashboard();
+}, []);
 
   if (loading) {
     return (
@@ -75,20 +71,28 @@ function Dashboard() {
       <WelcomeBanner />
 
       <PopularBooks
-        books={popularBooks}
+        books={tbrBooks}
+  likedBooks={likedBooks}
+  tbrBooks={tbrBooks}
       />
 
       <TbrPreview
         books={tbrBooks}
+  likedBooks={likedBooks}
+  tbrBooks={tbrBooks}
       />
 
       <LikedPreview
-        books={likedBooks}
+        books={tbrBooks}
+  likedBooks={likedBooks}
+  tbrBooks={tbrBooks}
       />
 
         <div id="recommendations">
   <RecommendationSection
-    books={popularBooks}
+    books={tbrBooks}
+  likedBooks={likedBooks}
+  tbrBooks={tbrBooks}
   />
 </div>
 

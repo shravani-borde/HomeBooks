@@ -14,10 +14,25 @@ import {
 
 import { useState } from "react";
 
-function BookCard({ book }) {
+function BookCard({
+  book,
+  likedBooks = [],
+  tbrBooks = []
+}) {
 
-    const [liked, setLiked] = useState(false);
-    const [saved, setSaved] = useState(false);
+  const [liked, setLiked] =
+    useState(
+      likedBooks.some(
+        b => b.id === book.id
+      )
+    );
+
+  const [saved, setSaved] =
+    useState(
+      tbrBooks.some(
+        b => b.id === book.id
+      )
+    );
 
     const [loadingLike,
 setLoadingLike] =
