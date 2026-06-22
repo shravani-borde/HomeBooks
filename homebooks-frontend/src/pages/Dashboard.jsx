@@ -15,55 +15,54 @@ import {
 
 function Dashboard() {
   const [popularBooks, setPopularBooks] =
-    useState([]);
+  useState([]);
 
-  const [tbrBooks, setTbrBooks] =
-    useState([]);
+const [tbrBooks, setTbrBooks] =
+  useState([]);
 
-  const [likedBooks, setLikedBooks] =
-    useState([]);
+const [likedBooks, setLikedBooks] =
+  useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  useEffect(() => {
-    loadDashboard();
-  }, []);
-
-  const loadDashboard = async () => {
-  try {
-    const [
-      booksData,
-      likedData,
-      tbrData
-    ] = await Promise.all([
-      getBooks(),
-      getLikedBooks(),
-      getTbrBooks()
-    ]);
-
-    setBooks(booksData.content);
-    setLikedBooks(likedData);
-    setTbrBooks(tbrData);
-
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoading(false);
-  }
-};
+const [loading, setLoading] =
+  useState(true);
 
 useEffect(() => {
   loadDashboard();
 }, []);
 
-  if (loading) {
-    return (
-      <Layout>
-        <h2>Loading...</h2>
-      </Layout>
-    );
-  }
+const loadDashboard =
+  async () => {
+    try {
+
+      const [
+        booksData,
+        likedData,
+        tbrData
+      ] = await Promise.all([
+        getBooks(),
+        getLikedBooks(),
+        getTbrBooks()
+      ]);
+
+      setPopularBooks(
+        booksData.content
+      );
+
+      setLikedBooks(
+        likedData
+      );
+
+      setTbrBooks(
+        tbrData
+      );
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <Layout>
@@ -71,7 +70,7 @@ useEffect(() => {
       <WelcomeBanner />
 
       <PopularBooks
-        books={tbrBooks}
+        books={popularBooks}
   likedBooks={likedBooks}
   tbrBooks={tbrBooks}
       />
@@ -83,14 +82,14 @@ useEffect(() => {
       />
 
       <LikedPreview
-        books={tbrBooks}
+        books={likedBooks}
   likedBooks={likedBooks}
   tbrBooks={tbrBooks}
       />
 
         <div id="recommendations">
   <RecommendationSection
-    books={tbrBooks}
+    books={popularBooks}
   likedBooks={likedBooks}
   tbrBooks={tbrBooks}
   />

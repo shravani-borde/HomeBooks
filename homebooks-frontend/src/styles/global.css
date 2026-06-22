@@ -471,3 +471,14 @@ body {
   transform:
     translateY(-5px);
 }
+
+.horizontal-books {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 15px 0;
+}
+
+.horizontal-books::-webkit-scrollbar {
+  display: none;
+}

@@ -9,6 +9,7 @@ import Ratings from "./pages/Ratings";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -18,6 +19,12 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       {/* Protected Routes */}
+
+      <Route
+  path="/"
+  element={<Home />}
+/>
+
       <Route
         path="/dashboard"
         element={

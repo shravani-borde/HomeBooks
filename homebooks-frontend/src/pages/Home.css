@@ -1,0 +1,88 @@
+.home-container {
+  min-height: 100vh;
+  background: #f8f9fc;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 70px;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.nav-btn {
+  margin-left: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.register-btn {
+  background: #6d5dfc;
+  color: white;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 100px;
+}
+
+.hero-text {
+  width: 55%;
+}
+
+.hero-text h1 {
+  font-size: 60px;
+  margin-bottom: 25px;
+}
+
+.hero-text p {
+  font-size: 20px;
+  color: gray;
+  margin-bottom: 40px;
+}
+
+.hero-buttons button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 12px;
+  margin-right: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  background: #6d5dfc;
+  color: white;
+}
+
+.secondary-btn {
+  background: white !important;
+  color: #6d5dfc !important;
+  border: 2px solid #6d5dfc !important;
+}
+
+.hero-image {
+  font-size: 170px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 0 100px 100px;
+}
+
+.feature-card {
+  background: white;
+  padding: 35px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.feature-card h3 {
+  margin: 20px 0;
+}
