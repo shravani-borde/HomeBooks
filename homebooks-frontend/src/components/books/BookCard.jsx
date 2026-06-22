@@ -12,7 +12,7 @@ import {
   rateBook
 } from "../../api/bookApi";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function BookCard({
   book,
@@ -21,22 +21,35 @@ function BookCard({
 }) {
 
   const [liked, setLiked] =
-    useState(
+    useState(false);
+
+  const [saved, setSaved] =
+    useState(false);
+
+  // 👇 PUT IT HERE
+  useEffect(() => {
+    setLiked(
       likedBooks.some(
         b => b.id === book.id
       )
     );
 
-  const [saved, setSaved] =
-    useState(
+    setSaved(
       tbrBooks.some(
         b => b.id === book.id
       )
     );
+  }, [
+    likedBooks,
+    tbrBooks,
+    book.id
+  ]);
 
-    const [loadingLike,
-setLoadingLike] =
-  useState(false);
+  const [loadingLike, setLoadingLike] =
+    useState(false);
+
+  const [loadingTbr, setLoadingTbr] =
+    useState(false);
 
   const handleLike = async () => {
   if (loadingLike) return;
@@ -62,9 +75,6 @@ setLoadingLike] =
   }
 };
 
-    const [loadingTbr,
-setLoadingTbr] =
-  useState(false);
 
   const handleTbr = async () => {
   if (loadingTbr) return;
