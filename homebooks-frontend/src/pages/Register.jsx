@@ -66,7 +66,7 @@ function Register() {
           <input
             type="text"
             name="name"
-            placeholder="Full Name"
+            placeholder="Name"
             value={formData.name}
             onChange={handleChange}
             required
@@ -103,6 +103,7 @@ function Register() {
             type="submit"
             disabled={loading}
           >
+            Register
             {loading
               ? "Creating..."
               : "Create Account"}
@@ -118,7 +119,7 @@ function Register() {
         <p>
           Already have an account?{" "}
           <Link to="/">
-            Sign In
+            Login
           </Link>
         </p>
       </div>

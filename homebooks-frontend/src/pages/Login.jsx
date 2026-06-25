@@ -1,79 +1,130 @@
 import { useState } from "react";
-import { loginUser } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/authApi";
+import "../styles/Auth.css";
 
 function Login() {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const navigate =
+    useNavigate();
 
-    const handleLogin = async (e) => {
-    e.preventDefault();
+  const [email, setEmail] =
+    useState("");
 
-    try {
+  const [password,
+    setPassword] =
+    useState("");
 
-        const token = await loginUser({
+  const handleSubmit =
+    async (e) => {
+
+      e.preventDefault();
+
+      try {
+        const response =
+          await loginUser({
             email,
             password
-        });
+          });
 
-        console.log("JWT:", token);
+        localStorage.setItem(
+          "token",
+          response
+        );
 
-        localStorage.setItem("token", token);
-        navigate("/books");
-        alert("Login Successful");
+        navigate(
+          "/dashboard"
+        );
 
-    } catch (error) {
+      } catch (error) {
+        alert(
+          "Invalid credentials"
+        );
+      }
+    };
 
-        console.error(error);
+  return (
+    <div className="auth-page">
 
-        alert("Invalid Credentials");
-    }
-};
+      <div className="auth-left">
+        <div className="auth-content">
+          <h1>📚 HomeBooks</h1>
 
-    const navigate = useNavigate();
-    
-    return (
-        <div className="container">
-
-            <h2>Login</h2>
-
-            <form onSubmit={handleLogin}>
-
-                <div>
-                    <label>Email</label>
-
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter email"
-                    />
-                </div>
-
-                <br />
-
-                <div>
-                    <label>Password</label>
-
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter password"
-                    />
-                </div>
-
-                <br />
-
-                <button type="submit">
-                    Login
-                </button>
-
-            </form>
-
+          <p>
+            Discover books,
+            build your TBR,
+            rate your favourites,
+            and receive
+            personalised
+            recommendations.
+          </p>
         </div>
-    );
+      </div>
+
+      <div className="auth-right">
+
+        <form
+          className="auth-card"
+          onSubmit={
+            handleSubmit
+          }
+        >
+
+          <h2>
+            Welcome Back
+          </h2>
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(
+                e.target.value
+              )
+            }
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+          />
+
+          <button
+            type="submit"
+          >
+            Login
+          </button>
+
+          <p
+            className="auth-link"
+          >
+            Don't have an account?
+
+            <span
+              onClick={() =>
+                navigate(
+                  "/register"
+                )
+              }
+            >
+              {" "}
+              Register
+            </span>
+          </p>
+
+        </form>
+
+      </div>
+
+    </div>
+  );
 }
 
 export default Login;
