@@ -56,6 +56,13 @@ public class User {
             inverseJoinColumns =
             @JoinColumn(name = "book_id")
     )
-    private Set<Book> likedBooks =
-            new HashSet<>();
+    private Set<Book> likedBooks = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "user_favorite_genres",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Column(name = "genre")
+    private Set<String> favoriteGenres = new HashSet<>();
 }

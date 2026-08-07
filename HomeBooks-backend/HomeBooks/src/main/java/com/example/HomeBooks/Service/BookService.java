@@ -124,4 +124,8 @@ public class BookService {
 
         return books.map(BookMapper::toDTO);
     }
+
+    public List<String> getGenres() {
+        return bookRepository.getAllGenres();
+    }
 }

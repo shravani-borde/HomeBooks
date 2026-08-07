@@ -6,11 +6,11 @@ import PopularBooks from "../components/dashboard/PopularBooks";
 import TbrPreview from "../components/dashboard/TbrPreview";
 import LikedPreview from "../components/dashboard/LikedPreview";
 import RecommendationSection from "../components/dashboard/RecommendationSection";
-
 import {
   getBooks,
   getTbrBooks,
-  getLikedBooks
+  getLikedBooks,
+  getRecommendations
 } from "../api/bookApi";
 
 function Dashboard() {
@@ -26,6 +26,10 @@ const [likedBooks, setLikedBooks] =
 const [loading, setLoading] =
   useState(true);
 
+const [recommendations,
+  setRecommendations] =
+  useState([]);
+
 useEffect(() => {
   loadDashboard();
 }, []);
@@ -35,26 +39,21 @@ const loadDashboard =
     try {
 
       const [
-        booksData,
-        likedData,
-        tbrData
-      ] = await Promise.all([
-        getBooks(),
-        getLikedBooks(),
-        getTbrBooks()
-      ]);
+  booksData,
+  likedData,
+  tbrData,
+  recommendationData
+] = await Promise.all([
+  getBooks(),
+  getLikedBooks(),
+  getTbrBooks(),
+  getRecommendations()
+]);
 
-      setPopularBooks(
-        booksData.content
-      );
-
-      setLikedBooks(
-        likedData
-      );
-
-      setTbrBooks(
-        tbrData
-      );
+setPopularBooks(booksData.content);
+setLikedBooks(likedData);
+setTbrBooks(tbrData);
+setRecommendations(recommendationData);
 
     } catch (error) {
       console.log(error);
@@ -87,13 +86,11 @@ const loadDashboard =
   tbrBooks={tbrBooks}
       />
 
-        <div id="recommendations">
-  <RecommendationSection
-    books={popularBooks}
+        <RecommendationSection
+  books={recommendations}
   likedBooks={likedBooks}
   tbrBooks={tbrBooks}
-  />
-</div>
+      />
 
     </Layout>
   );

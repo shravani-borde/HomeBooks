@@ -9,12 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface LikeRepository
-        extends JpaRepository<Like, Long> {
+public interface LikeRepository extends JpaRepository<Like, Long> {
 
     // Check if user already liked book
     Optional<Like> findByUserAndBook(User user, Book book);
 
     // Get all likes of a user
     List<Like> findByUser(User user);
+
+    // NEW
+    List<Like> findByUser_Email(String email);
 }

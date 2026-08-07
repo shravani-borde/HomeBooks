@@ -5,22 +5,39 @@ function RecommendationSection({
   likedBooks,
   tbrBooks
 }) {
+
   return (
-    <section id="recommendations">
+    <section className="dashboard-section">
 
       <h2>
-        Recommendations For You ⭐
+        Recommended For You
       </h2>
 
-      <div className="recommendation-grid">
-        {books.map((book) => (
-          <BookCard
-  key={book.id}
-  book={book}
-  likedBooks={likedBooks}
-  tbrBooks={tbrBooks}
-/>
-        ))}
+      <div className="book-grid">
+
+        {books.length > 0 ? (
+
+          books.map(book => (
+
+            <BookCard
+              key={book.id}
+              book={book}
+              likedBooks={likedBooks}
+              tbrBooks={tbrBooks}
+            />
+
+          ))
+
+        ) : (
+
+          <p>
+            Like a few books to
+            get personalized
+            recommendations.
+          </p>
+
+        )}
+
       </div>
 
     </section>
