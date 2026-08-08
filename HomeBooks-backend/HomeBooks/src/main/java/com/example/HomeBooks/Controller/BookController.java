@@ -94,4 +94,11 @@ public class BookController {
 
         return ResponseEntity.ok(books);
     }
+
+    @GetMapping("/genres")
+    public ResponseEntity<List<String>> getGenres() {
+        return ResponseEntity.ok(
+                bookService.getGenres()
+        );
+    }
 }

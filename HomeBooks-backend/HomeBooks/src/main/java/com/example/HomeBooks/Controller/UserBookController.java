@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserBookController {
@@ -150,6 +152,34 @@ public class UserBookController {
 
         return ResponseEntity.ok(
                 "Book unliked"
+        );
+    }
+
+    @PostMapping("/favorite-genres")
+    public ResponseEntity<String> saveFavoriteGenres(
+            @RequestBody Set<String> genres,
+            Authentication auth
+    ) {
+
+        userService.saveFavoriteGenres(
+                auth.getName(),
+                genres
+        );
+
+        return ResponseEntity.ok(
+                "Favorite genres saved"
+        );
+    }
+
+    @GetMapping("/favorite-genres")
+    public ResponseEntity<Set<String>> getFavoriteGenres(
+            Authentication auth
+    ) {
+
+        return ResponseEntity.ok(
+                userService.getFavoriteGenres(
+                        auth.getName()
+                )
         );
     }
 }

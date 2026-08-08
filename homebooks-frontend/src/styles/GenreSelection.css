@@ -1,0 +1,93 @@
+.genre-page{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#f4f6fb;
+
+}
+
+.genre-card{
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:15px;
+
+    width:700px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    text-align:center;
+
+}
+
+.genre-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+
+    margin:30px 0;
+
+}
+
+.genre-btn{
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#ececec;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:15px;
+
+}
+
+.genre-btn:hover{
+
+    transform:scale(1.03);
+
+}
+
+.selected{
+
+    background:#6d5dfc;
+
+    color:white;
+
+}
+
+.save-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#6d5dfc;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+}

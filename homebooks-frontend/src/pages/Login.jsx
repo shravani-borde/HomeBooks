@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
 import "../styles/Auth.css";
+import { getFavoriteGenres } from "../api/bookApi";
 
 function Login() {
 
@@ -32,9 +33,14 @@ function Login() {
           response
         );
 
-        navigate(
-          "/dashboard"
-        );
+        const genres =
+        await getFavoriteGenres();
+
+        if (genres.length === 0) {
+          navigate("/genres");
+        } else {
+          navigate("/dashboard");
+        }
 
       } catch (error) {
         alert(

@@ -145,3 +145,30 @@ export const getRecommendations = async () => {
 
   return response.data;
 };
+
+export const getGenres = async () => {
+  const response =
+    await api.get("/books/genres");
+
+  return response.data;
+};
+
+export const getFavoriteGenres =
+  async () => {
+
+    const response =
+      await api.get(
+        "/user/favorite-genres"
+      );
+
+    return response.data;
+};
+
+export const saveFavoriteGenres =
+  async (genres) => {
+
+    await api.post(
+      "/user/favorite-genres",
+      genres
+    );
+};

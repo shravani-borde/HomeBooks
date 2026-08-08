@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
+import GenreSelection from "./pages/GenreSelection";
 
 function App() {
   return (
@@ -87,6 +88,11 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+    path="/genres"
+    element={<GenreSelection />}
+/>
     </Routes>
   );
 }

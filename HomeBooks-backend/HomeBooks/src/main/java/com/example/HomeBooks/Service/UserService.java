@@ -181,4 +181,31 @@ public class UserService {
                         Collectors.toSet()
                 );
     }
+
+    public void saveFavoriteGenres(
+            String email,
+            Set<String> genres
+    ) {
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        user.setFavoriteGenres(genres);
+
+        userRepository.save(user);
+    }
+
+    public Set<String> getFavoriteGenres(
+            String email
+    ) {
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        return user.getFavoriteGenres();
+    }
 }
