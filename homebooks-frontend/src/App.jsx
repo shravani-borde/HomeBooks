@@ -11,6 +11,8 @@ import Settings from "./pages/Settings";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
 import GenreSelection from "./pages/GenreSelection";
+import BookDetails from "./pages/BookDetails";
+
 
 function App() {
   return (
@@ -92,6 +94,11 @@ function App() {
       <Route
     path="/genres"
     element={<GenreSelection />}
+/>
+
+<Route
+    path="/books/:id"
+    element={<BookDetails />}
 />
     </Routes>
   );

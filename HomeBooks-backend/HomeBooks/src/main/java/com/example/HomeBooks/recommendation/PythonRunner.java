@@ -10,21 +10,25 @@ import java.util.List;
 @Component
 public class PythonRunner {
 
-    public List<Long> getRecommendedBookIds(Long bookId) {
+    public List<Long> getRecommendedBookIds(
+            String email
+    ) {
 
         List<Long> ids = new ArrayList<>();
 
         try {
 
-            ProcessBuilder pb = new ProcessBuilder(
-                    "python",
-                    "ml/recommend.py",
-                    bookId.toString()
-            );
+            ProcessBuilder processBuilder =
+                    new ProcessBuilder(
+                            "python",
+                            "ml/recommend.py",
+                            email
+                    );
 
-            pb.redirectErrorStream(true);
+            processBuilder.redirectErrorStream(true);
 
-            Process process = pb.start();
+            Process process =
+                    processBuilder.start();
 
             BufferedReader reader =
                     new BufferedReader(
@@ -37,22 +41,32 @@ public class PythonRunner {
 
             while ((line = reader.readLine()) != null) {
 
-                ids.add(
-                        Long.parseLong(line)
-                );
+                line = line.trim();
 
+                // Ignore Python warnings/messages
+                if (line.matches("\\d+")) {
+
+                    ids.add(
+                            Long.parseLong(line)
+                    );
+                }
             }
 
-            process.waitFor();
+            int exitCode =
+                    process.waitFor();
 
-        }
-        catch (Exception e) {
+            if (exitCode != 0) {
+                System.out.println(
+                        "Python exited with code: "
+                                + exitCode
+                );
+            }
+
+        } catch (Exception e) {
 
             e.printStackTrace();
-
         }
 
         return ids;
     }
-
 }

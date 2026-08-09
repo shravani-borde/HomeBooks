@@ -13,6 +13,7 @@ import {
 } from "../../api/bookApi";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function BookCard({
   book,
@@ -26,7 +27,8 @@ function BookCard({
   const [saved, setSaved] =
     useState(false);
 
-  // 👇 PUT IT HERE
+  const navigate = useNavigate();
+
   useEffect(() => {
     setLiked(
       likedBooks.some(
@@ -122,8 +124,16 @@ const [selectedRating,
     }
   };
 
-  return (
-    <div className="book-card">
+return (
+  <div className="book-card">
+
+    {/* CLICKABLE BOOK INFORMATION */}
+    <div
+      className="book-info"
+      onClick={() =>
+        navigate(`/books/${book.id}`)
+      }
+    >
 
       <div className="book-image">
         {book.coverImage ? (
@@ -131,8 +141,7 @@ const [selectedRating,
             src={book.coverImage}
             alt={book.title}
             onError={(e) =>
-              (e.target.style.display =
-                "none")
+              (e.target.style.display = "none")
             }
           />
         ) : (
@@ -150,83 +159,82 @@ const [selectedRating,
         ⭐ {book.rating}/10
       </p>
 
-      <div className="book-actions">
+    </div>
 
-        {showRating && (
-  <div className="star-rating">
 
-    {[...Array(10)].map(
-      (_, index) => {
-        const value =
-          index + 1;
+    {/* ACTIONS */}
+    <div className="book-actions">
 
-        return (
-          <FaStar
-            key={value}
-            className="rating-star"
-            color={
-              value <=
-              (
-                hoveredRating ||
-                selectedRating
-              )
-                ? "#ffc107"
-                : "#e4e5e9"
+      {showRating && (
+        <div className="star-rating">
+
+          {[...Array(10)].map(
+            (_, index) => {
+
+              const value = index + 1;
+
+              return (
+                <FaStar
+                  key={value}
+                  className="rating-star"
+                  color={
+                    value <=
+                    (
+                      hoveredRating ||
+                      selectedRating
+                    )
+                      ? "#ffc107"
+                      : "#e4e5e9"
+                  }
+                  size={25}
+                  onMouseEnter={() =>
+                    setHoveredRating(value)
+                  }
+                  onMouseLeave={() =>
+                    setHoveredRating(0)
+                  }
+                  onClick={() =>
+                    handleRating(value)
+                  }
+                />
+              );
             }
-            size={25}
-            onMouseEnter={() =>
-              setHoveredRating(
-                value
-              )
-            }
-            onMouseLeave={() =>
-              setHoveredRating(0)
-            }
-            onClick={() =>
-              handleRating(
-                value
-              )
-            }
-          />
-        );
-      }
-    )}
+          )}
 
-  </div>
-)}
+        </div>
+      )}
 
-        <FaHeart
-  className="action-icon"
-  color={
-    liked
-      ? "red"
-      : "gray"
-  }
-  onClick={handleLike}
-/>
+      <FaHeart
+        className="action-icon"
+        color={
+          liked
+            ? "red"
+            : "gray"
+        }
+        onClick={handleLike}
+      />
 
-        <FaBookmark
-  className="action-icon"
-  color={
-    saved
-      ? "#6d5dfc"
-      : "gray"
-  }
-  onClick={handleTbr}
-/>
+      <FaBookmark
+        className="action-icon"
+        color={
+          saved
+            ? "#6d5dfc"
+            : "gray"
+        }
+        onClick={handleTbr}
+      />
 
-        <FaStar
-  onClick={() =>
-    setShowRating(
-      !showRating
-    )
-  }
-/>
-
-      </div>
+      <FaStar
+        className="action-icon"
+        onClick={() =>
+          setShowRating(!showRating)
+        }
+      />
 
     </div>
-  );
+
+  </div>
+);
 }
 
 export default BookCard;
