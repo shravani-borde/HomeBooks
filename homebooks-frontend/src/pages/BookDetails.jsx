@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import {
-    getBookById,
-    addToTbr,
-    likeBook,
-    rateBook
-} from "../api/bookApi";
-
 import "../styles/BookDetails.css";
+
+import {
+  getBookById,
+  getLikedBooks,
+  getTbrBooks,
+  addLikedBook,
+  removeLikedBook,
+  addToTbr,
+  removeFromTbr,
+  likeBook,
+  rateBook
+} from "../api/bookApi";
 
 function BookDetails() {
 
@@ -20,9 +25,37 @@ function BookDetails() {
 
     const [rating, setRating] = useState(0);
 
+    const [liked, setLiked] = useState(false);
+const [saved, setSaved] = useState(false);
+
     useEffect(() => {
-        loadBook();
-    }, [id]);
+  loadBook();
+  loadUserState();
+}, [id]);
+
+    const loadUserState = async () => {
+  try {
+    const [likedData, tbrData] = await Promise.all([
+      getLikedBooks(),
+      getTbrBooks()
+    ]);
+
+    setLiked(
+      likedData.some(
+        book => book.id === Number(id)
+      )
+    );
+
+    setSaved(
+      tbrData.some(
+        book => book.id === Number(id)
+      )
+    );
+
+  } catch (error) {
+    console.log("Failed to load user state:", error);
+  }
+};
 
     const loadBook = async () => {
 
@@ -45,34 +78,36 @@ function BookDetails() {
     };
 
     const handleLike = async () => {
+  try {
 
-        try {
+    if (liked) {
+      await removeLikedBook(book.id);
+      setLiked(false);
+    } else {
+      await addLikedBook(book.id);
+      setLiked(true);
+    }
 
-            await likeBook(book.id);
-
-            alert("Book liked ❤️");
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     const handleTbr = async () => {
+  try {
 
-        try {
+    if (saved) {
+      await removeFromTbr(book.id);
+      setSaved(false);
+    } else {
+      await addToTbr(book.id);
+      setSaved(true);
+    }
 
-            await addToTbr(book.id);
-
-            alert("Added to TBR 📚");
-
-        } catch (error) {
-
-            console.log(error);
-
-        }
-    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     const handleRating = async (score) => {
 
@@ -171,16 +206,14 @@ function BookDetails() {
 
                     <div className="details-actions">
 
-                        <button
-                            onClick={handleLike}
-                        >
-                            ❤️ Like
+                        <button onClick={handleLike}>
+                          {liked ? "❤️ Liked" : "❤️ Like"}
                         </button>
 
-                        <button
-                            onClick={handleTbr}
-                        >
-                            📚 Add to TBR
+                        <button onClick={handleTbr}>
+                          {saved
+                            ? "📚 In TBR"
+                            : "📚 Add to TBR"}
                         </button>
 
                     </div>
