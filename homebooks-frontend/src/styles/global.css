@@ -482,3 +482,14 @@ body {
 .horizontal-books::-webkit-scrollbar {
   display: none;
 }
+
+.recommendation-section {
+    width: 100%;
+}
+
+.recommendation-loader {
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  color: gray;
+}

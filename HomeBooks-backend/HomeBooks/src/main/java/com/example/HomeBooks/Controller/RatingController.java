@@ -41,6 +41,27 @@ public class RatingController {
         return ResponseEntity.ok(average);
     }
 
+    @GetMapping("/book/{bookId}/my")
+    public ResponseEntity<Rating> getMyRating(
+            @PathVariable Long bookId
+    ) {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        String email =
+                authentication.getName();
+
+        return ResponseEntity.ok(
+                ratingService.getMyRating(
+                        email,
+                        bookId
+                )
+        );
+    }
+
     @GetMapping("/top-rated")
     public ResponseEntity<List<TopRatedBookDTO>> getTopRatedBooks() {
         List<TopRatedBookDTO> books = ratingService.getTopRatedBooks();
@@ -64,4 +85,6 @@ public class RatingController {
                 ratingService.getMyRatings(email)
         );
     }
+
+
 }

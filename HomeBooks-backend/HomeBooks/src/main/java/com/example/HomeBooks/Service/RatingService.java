@@ -91,6 +91,36 @@ public class RatingService {
         return average;
     }
 
+    public Rating getMyRating(
+            String email,
+            Long bookId
+    ) {
+
+        User user =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "User not found"
+                                        )
+                        );
+
+        Book book =
+                bookRepository
+                        .findById(bookId)
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "Book not found"
+                                        )
+                        );
+
+        return ratingRepository
+                .findByUserAndBook(user, book)
+                .orElse(null);
+    }
+
     public List<TopRatedBookDTO>
     getTopRatedBooks() {
         return ratingRepository.getTopRatedBooks();

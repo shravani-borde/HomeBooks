@@ -200,9 +200,11 @@ tfidf_matrix = vectorizer.transform(
 # 11. Build user profile
 # ============================================================
 
-profile_vectors = []
-weights = []
+positive_vectors = []
+positive_weights = []
 
+negative_vectors = []
+negative_weights = []
 
 # ------------------------------------------------------------
 # Liked books
@@ -216,11 +218,11 @@ for book_id in liked_ids:
 
     if matches:
 
-        profile_vectors.append(
+        positive_vectors.append(
             tfidf_matrix[matches[0]]
         )
 
-        weights.append(3.0)
+        positive_weights.append(3.0)
 
 
 # ------------------------------------------------------------
@@ -235,11 +237,11 @@ for book_id in tbr_ids:
 
     if matches:
 
-        profile_vectors.append(
+        positive_vectors.append(
             tfidf_matrix[matches[0]]
         )
 
-        weights.append(1.5)
+        positive_weights.append(1.5)
 
 
 # ------------------------------------------------------------
@@ -255,21 +257,47 @@ for _, row in ratings_df.iterrows():
         books["id"] == book_id
     ].tolist()
 
-    if matches:
+    if not matches:
+        continue
 
-        weight = max(score / 10.0, 0.1)
+    vector = tfidf_matrix[matches[0]]
 
-        profile_vectors.append(
-            tfidf_matrix[matches[0]]
-        )
+    # -----------------------------------------
+    # High rating = positive preference
+    # -----------------------------------------
 
-        weights.append(weight)
+    if score >= 8:
+
+        weight = (score - 7) / 3.0
+
+        positive_vectors.append(vector)
+        positive_weights.append(weight)
+
+    # -----------------------------------------
+    # Medium rating = neutral
+    # -----------------------------------------
+
+    elif score >= 5:
+
+        # Don't strongly influence the profile
+        continue
+
+    # -----------------------------------------
+    # Low rating = negative preference
+    # -----------------------------------------
+
+    else:
+
+        weight = (5 - score) / 4.0
+
+        negative_vectors.append(vector)
+        negative_weights.append(weight)
 
 # ============================================================
 # 12. Handle users with no interactions
 # ============================================================
 
-if not profile_vectors:
+if not positive_vectors and not negative_vectors:
 
     if favorite_genres:
 
@@ -292,7 +320,7 @@ if not profile_vectors:
         recommendations = recommendations.sort_values(
             "rating",
             ascending=False
-        ).head(10)
+        )
 
         for book_id in recommendations["id"]:
             print(int(book_id))
@@ -302,42 +330,111 @@ if not profile_vectors:
         recommendations = books.sort_values(
             "rating",
             ascending=False
-        ).head(10)
+        )
 
         for book_id in recommendations["id"]:
             print(int(book_id))
 
     sys.exit(0)
 
-
 # ============================================================
-# 13. Create user preference vector
-# ============================================================
-
-user_profile = profile_vectors[0] * weights[0]
-
-for vector, weight in zip(
-        profile_vectors[1:],
-        weights[1:]):
-
-    user_profile += vector * weight
-
-
-# ============================================================
-# 14. Calculate similarity
+# 13. Create positive user profile
 # ============================================================
 
-similarities = cosine_similarity(
-    user_profile,
-    tfidf_matrix
-).flatten()
+positive_profile = None
 
+if positive_vectors:
 
-books["similarity"] = similarities
+    positive_profile = (
+        positive_vectors[0]
+        * positive_weights[0]
+    )
+
+    for vector, weight in zip(
+        positive_vectors[1:],
+        positive_weights[1:]
+    ):
+
+        positive_profile += (
+            vector * weight
+        )
 
 
 # ============================================================
-# 15. Remove already interacted books
+# 14. Create negative user profile
+# ============================================================
+
+negative_profile = None
+
+if negative_vectors:
+
+    negative_profile = (
+        negative_vectors[0]
+        * negative_weights[0]
+    )
+
+    for vector, weight in zip(
+        negative_vectors[1:],
+        negative_weights[1:]
+    ):
+
+        negative_profile += (
+            vector * weight
+        )
+
+# ============================================================
+# 15. Calculate positive similarity
+# ============================================================
+
+if positive_profile is not None:
+
+    positive_similarity = cosine_similarity(
+        positive_profile,
+        tfidf_matrix
+    ).flatten()
+
+else:
+
+    positive_similarity = (
+        pd.Series(
+            0.0,
+            index=range(len(books))
+        ).values
+    )
+
+
+# ============================================================
+# 16. Calculate negative similarity
+# ============================================================
+
+if negative_profile is not None:
+
+    negative_similarity = cosine_similarity(
+        negative_profile,
+        tfidf_matrix
+    ).flatten()
+
+else:
+
+    negative_similarity = (
+        pd.Series(
+            0.0,
+            index=range(len(books))
+        ).values
+    )
+
+
+books["positive_similarity"] = (
+    positive_similarity
+)
+
+books["negative_similarity"] = (
+    negative_similarity
+)
+
+
+# ============================================================
+# 17. Remove already interacted books
 # ============================================================
 
 excluded_ids = (
@@ -356,7 +453,7 @@ books = books[
 
 
 # ============================================================
-# 16. Give favorite genres a small boost
+# 18. Give favorite genres a small boost
 # ============================================================
 
 if favorite_genres:
@@ -375,23 +472,34 @@ else:
 
 
 books["final_score"] = (
-    books["similarity"] +
-    books["genre_boost"]
+    books["positive_similarity"]
+    - (
+        1.1 *
+        books["negative_similarity"]
+    )
+    + books["genre_boost"]
 )
 
+print("Liked books:", len(liked_ids))
+print("TBR books:", len(tbr_ids))
+print("Rated books:", len(ratings_df))
+print("Positive vectors:", len(positive_vectors))
+print("Negative vectors:", len(negative_vectors))
+print("Favorite genres:", favorite_genres)
+print("Books available for recommendation:", len(books))
 
 # ============================================================
-# 17. Top 10 recommendations
+# 19. Top 10 recommendations
 # ============================================================
 
 recommendations = books.sort_values(
     "final_score",
     ascending=False
-).head(10)
+)
 
 
 # ============================================================
-# 18. Return only book IDs
+# 20. Return only book IDs
 # ============================================================
 
 for book_id in recommendations["id"]:

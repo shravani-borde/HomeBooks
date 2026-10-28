@@ -12,7 +12,8 @@ import {
   addToTbr,
   removeFromTbr,
   likeBook,
-  rateBook
+  rateBook,
+  getMyRating
 } from "../api/bookApi";
 
 function BookDetails() {
@@ -31,6 +32,10 @@ const [saved, setSaved] = useState(false);
     useEffect(() => {
   loadBook();
   loadUserState();
+}, [id]);
+
+useEffect(() => {
+    loadMyRating();
 }, [id]);
 
     const loadUserState = async () => {
@@ -107,6 +112,29 @@ const [saved, setSaved] = useState(false);
   } catch (error) {
     console.log(error);
   }
+};
+
+const loadMyRating = async () => {
+
+    try {
+
+        const data =
+            await getMyRating(id);
+
+        if (data) {
+            setRating(data.score);
+        } else {
+            setRating(0);
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Failed to load rating:",
+            error
+        );
+
+    }
 };
 
     const handleRating = async (score) => {
@@ -221,7 +249,7 @@ const [saved, setSaved] = useState(false);
                     <div className="rating-section">
 
                         <h3>
-                            Rate this book
+                            Your Rating
                         </h3>
 
                         <div className="rating-buttons">

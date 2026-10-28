@@ -180,3 +180,11 @@ export const getBookById = async (id) => {
 
     return response.data;
 };
+
+export const getMyRating = async (bookId) => {
+    const response = await api.get(
+        `/ratings/book/${bookId}/my`
+    );
+
+    return response.data;
+};
